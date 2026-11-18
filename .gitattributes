@@ -1,0 +1,8 @@
+* text=auto eol=lf
+
+# Windows 환경에서 작업해도 저장소에는 LF로 통일해
+# Render(Linux) 배포 시 쉘 스크립트/설정 파일의 줄바꿈 문제를 방지합니다.
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf

@@ -1,0 +1,31 @@
+# Render Blueprint (Infrastructure as Code)
+#
+# Render 대시보드에서 "New + → Blueprint" 로 이 저장소를 선택하면
+# 아래 설정으로 웹 서비스가 자동 생성됩니다.
+# ⚠️ 무료 플랜의 디스크는 영속적이지 않으므로 STORAGE_DRIVER=json 의 데이터는
+#    재배포/재시작 시 초기화될 수 있습니다. 영속 저장이 필요하면 유료 Disk 를 붙이거나
+#    외부 DB(Postgres, Redis, SQLite + Disk) 저장소로 교체하세요.
+
+services:
+  - type: web
+    name: url-shortener
+    runtime: node
+    plan: free
+    region: singapore # 필요 시 변경 (oregon, frankfurt 등)
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      # PORT 는 Render 가 자동 주입합니다 (설정 불필요).
+      # BASE_URL 을 비워두면 Render 가 주입하는 RENDER_EXTERNAL_URL 이 자동 사용됩니다.
+      - key: NODE_VERSION
+        value: "20"
+      - key: STORAGE_DRIVER
+        value: json
+      - key: STORAGE_FILE
+        value: ./data/urls.json
+      - key: SHORT_CODE_LENGTH
+        value: "7"
+      - key: REDIRECT_STATUS
+        value: "302"
